@@ -19,6 +19,15 @@ const paymentSchema = new Schema(
       type: String,
       default: "",
     },
+    type: {
+      type: String,
+      enum: ["interest", "khet", "girvi", "other"],
+      default: "interest",
+    },
+    rate: {
+      type: Number,
+      default: 5,
+    },
     status: {
       type: String,
       enum: ["pending", "completed", "deleted"],

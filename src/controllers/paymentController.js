@@ -4,13 +4,15 @@ const User = require("../models/user");
 
 const addPayment = async (req, res) => {
   try {
-    const { name, amount, date, description } = req.body;
+    const { name, amount, date, description, rate, type } = req.body;
     const newPayment = new Payment({
       name,
       amount,
       date,
       description,
       user: req.user._id,
+      type,
+      rate,
     });
     await newPayment.save();
     const newSummary = new PaymentSummary({
@@ -28,7 +30,7 @@ const addPayment = async (req, res) => {
 
 const updatePayment = async (req, res) => {
   try {
-    const { name, amount, date, description, status } = req.body;
+    const { name, amount, date, description, status, rate, type } = req.body;
     const payment = await Payment.findById(req.params.id);
     if (!payment) {
       return res.status(404).json({ message: "Payment not found" });
@@ -40,6 +42,8 @@ const updatePayment = async (req, res) => {
     if (date) query.date = date;
     if (description) query.description = description;
     if (status) query.status = status;
+    if (rate) query.rate = rate;
+    if (type) query.type = type;
 
     const updatedData = await Payment.findByIdAndUpdate(req.params.id, query, {
       new: true,
