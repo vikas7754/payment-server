@@ -1,6 +1,5 @@
 const Payment = require("../models/payment");
 const PaymentSummary = require("../models/summary");
-const User = require("../models/user");
 
 const addPayment = async (req, res) => {
   try {
@@ -14,7 +13,7 @@ const addPayment = async (req, res) => {
       type,
       rate,
     });
-    await newPayment.save();
+    const payment = await newPayment.save();
     const newSummary = new PaymentSummary({
       payment: newPayment._id,
       action: "created",
@@ -22,7 +21,7 @@ const addPayment = async (req, res) => {
       updatedData: newPayment,
     });
     await newSummary.save();
-    return res.status(200).json({ message: "Payment added successfully!" });
+    return res.status(200).json(payment);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -58,7 +57,7 @@ const updatePayment = async (req, res) => {
     });
     await newSummary.save();
 
-    return res.status(200).json({ message: "Payment updated successfully!" });
+    return res.status(200).json(updatedData);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
